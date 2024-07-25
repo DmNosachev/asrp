@@ -1,0 +1,500 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{asrp}[2024/07/25 ASRP style]
+
+
+
+\RequirePackage[dvipsnames]{xcolor}
+
+\newcommand{\asrpName}{Перспективные Научно-Исследовательские Разработки}
+\newcommand{\asrpNameEn}{Advanced Scientific Research Projects}
+\definecolor{asrpColorMain}{HTML}{C00000} % заголовки
+\definecolor{asrpAutColor}{HTML}{FF0000} % заголовки
+\definecolor{asrpHeaderRule}{HTML}{800000} % линейка в шапке
+\definecolor{asrpKWName}{HTML}{800000} % Keywords name
+\definecolor{asrpKW}{HTML}{2A0000} % Keywords
+\definecolor{asrpCiteColor}{HTML}{FF8080} % цитаты
+\definecolor{asrpURLColor}{HTML}{FF2A2A} % URL
+\definecolor{asrpHeaderText}{HTML}{4D4D4D} % текст в колонтитуле
+\definecolor{asrpAutEmail}{HTML}{303030} % ссылки email в шапке
+\definecolor{asrpTbGray}{HTML}{F4F4F4} % серый фон для первой строки и линий таблиц
+\definecolor{asrpTbFontGray}{HTML}{7A7A7A} % серый шрифт для таблиц
+\definecolor{asrpTbLineColor}{HTML}{D9D9D9} % серый для линий таблиц
+
+
+%*******************
+% размеры и поля
+%*******************
+\RequirePackage[paperheight=290mm,
+            paperwidth=205mm,
+            top=24mm,
+            bottom=30mm,
+            left=20mm,
+            right=20mm]{geometry}
+
+\RequirePackage[skip=8pt plus1pt]{parskip}
+
+%*******************
+% шрифты
+%*******************
+% Языки
+\RequirePackage{polyglossia}
+\setmainlanguage{english}
+\setotherlanguages{russian}
+
+
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+
+%\setmainfont[ItalicFont={Noto Sans Italic}]{Onest}
+\setmainfont{Noto Sans} 
+\setromanfont[Scale=MatchLowercase]{Noto Serif}
+\setsansfont{Noto Sans}
+
+\IfFontExistsTF{Noto Mono}{%
+    \setmonofont[Scale=MatchLowercase]{Noto Mono}%
+    \newfontfamily{\cyrillicfonttt}[Scale=MatchLowercase]{Noto Mono}%
+    \newfontfamily\noligsmonofamily[NFSSFamily=noligsmonofamily]{Noto Mono}%
+    }%
+    {\setmonofont[Scale=MatchLowercase]{Noto Sans Mono}%
+     \newfontfamily{\cyrillicfonttt}[Scale=MatchLowercase]{Noto Sans Mono}%
+     \newfontfamily\noligsmonofamily[NFSSFamily=noligsmonofamily]{Noto Sans Mono}%
+    }
+
+% Sans по умолчанию
+%\renewcommand{\familydefault}{\sfdefault}
+
+\newfontfamily{\medfont}{Noto Sans Medium}
+%\newfontfamily{\lightfont}{Onest Light}
+
+
+\RequirePackage{microtype}
+
+%*******************
+% формулы
+%*******************
+%\RequirePackage{icomma} %запятая в десятичных дробях (зацикливается!)
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+%\RequirePackage{amssymb} % символы есть в Erewhon
+\RequirePackage[math-style=upright]{unicode-math}
+\setmathfont{Erewhon Math}[Scale=MatchLowercase, StylisticSet={4}]
+
+% операторы набирать с \mathnormal. Пример: %\DeclareMathOperator{\myop}{\mathnormal{MyOP}}
+
+% Использовать шрифт unicode-math в обычных операторах (sin, cos и т.п.) 
+%\setoperatorfont\symscr
+
+% уменьшить вертикальные отступы в выключных формулах
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
+
+% \text в формулах набирать через serif (roman font)
+\newcommand{\mt}[1]{\text{\textrm{#1}}}
+
+\RequirePackage{siunitx}
+%\sisetup{detect-all, range-units = single, range-phrase= \text{--}, per-mode=symbol, output-decimal-marker = {,}}
+\sisetup{detect-all, range-units = single, range-phrase= \text{--}, per-mode=symbol}
+
+
+
+%*******************
+% графика
+%*******************
+
+% Пути к каталогам с изображениями
+\RequirePackage{graphicx} % Вставка картинок и дополнений
+\graphicspath{{images/}}
+
+
+
+%*******************
+% прочее
+%*******************
+\RequirePackage[nodisplayskipstretch]{setspace} % для управления межстрочным
+\def\setmainlinespread{\setstretch{1.2}}
+\RequirePackage{float} % Расширенное управление плавающими объектами
+\RequirePackage{placeins} % для \FloatBarrier 
+\RequirePackage{multicol} % Многоколоночная верстка
+\RequirePackage[labelformat=brace]{subcaption}
+\RequirePackage{lscape} % повернутые страницы
+
+% вставка пустой страницы
+\RequirePackage{afterpage}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    %\addtocounter{page}{-1}%
+    \newpage}
+
+%*******************
+% Списки
+%*******************
+\RequirePackage{enumitem}
+% Используем короткое тире (endash) для ненумерованных списков
+\renewcommand{\labelitemi}{\normalfont{--}}
+
+\setlist{nosep, nolistsep, topsep=0pt, labelindent=*,leftmargin=*}
+
+% стиль для вложенной нумерации цифрами
+\newlist{romanenum}{enumerate}{2}
+\setlist[romanenum, 1]
+{label=\arabic{romanenumi}., %1., 2., 3., ...
+}
+\setlist[romanenum, 2]
+{label=\arabic{romanenumi}.\arabic{romanenumii}, %1.1, 1.2, 1.3...
+}
+
+% счетчик кириллицей
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
+
+%*******************
+% стиль подписей к рисункам и таблицам
+%*******************
+\RequirePackage[labelfont={small,bf}, textfont={small}, labelsep=period]{caption}
+\captionsetup{justification=raggedright, singlelinecheck=false}
+
+%\renewcommand\thesubfigure{\asbuk{subfigure})}
+
+%*******************
+% таблицы
+%*******************
+
+\RequirePackage{tabularray}
+\NewTblrTheme{asrp}{
+    %\SetTblrStyle{firsthead}{font=\bfseries}
+    \SetTblrStyle{caption-tag}{font=\small\bfseries}
+    \SetTblrStyle{caption-text}{font=\small}
+    \SetTblrStyle{contfoot-text}{font=\small}
+    \SetTblrStyle{conthead-text}{font=\small}
+}
+
+\DefTblrTemplate{caption-sep}{default}{.\enskip}
+\DefTblrTemplate{contfoot-text}{default}{Continued on next page}
+\DefTblrTemplate{conthead-text}{default}{(Continued)}
+
+%*******************
+% Заголовки
+%*******************
+\RequirePackage[pagestyles,explicit]{titlesec}
+\RequirePackage{titletoc}
+
+% \titleformat{command}[shape]{format}{label}{sep}{before-code}[after-code]
+
+
+%\titleformat{\chapter}%
+%{\normalfont\HUGE\bfseries}%
+%{\MakeUppercase{#1}}%
+%{.5em}
+%{\vspace{.5ex}}
+%[\thispagestyle{empty}\afterpage{\blankpage}]
+\titleformat{\chapter}[block]
+  {\normalfont\fontsize{33pt}{33pt}\selectfont\bfseries}
+  {\parbox{0.7\textwidth}
+    {\raggedright\MakeUppercase{#1}}}
+    {0pt}
+    {\thispagestyle{empty}}
+    [\afterpage{\blankpage}]
+
+  
+\titleformat{\section}[block]
+{\color{asrpColorMain}\setstretch{1.1}\raggedright \huge \bfseries \sffamily}
+{#1}
+{0em}
+{}
+[{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}]
+    
+\titleformat{\subsection}[block]
+{\color{asrpColorMain}\raggedright\large\bfseries\sffamily}
+{#1}
+{0pt}
+{}
+[]
+
+\titlespacing*{\section}
+    {0pt} % left
+    {3mm} % before
+    {1em} % after
+    
+% titlesec добавляет много сверху, убираем
+\titlespacing*{\chapter}
+    {0pt} % left
+    {-0.5in} % before
+    {1em} % after
+    
+\titlespacing*{\subsection}
+{0pt} % left
+{4pt} % before
+{0pt} % after
+
+%*******************
+% Стили в оглавлении
+%*******************
+
+\titlecontents{chapter}
+[5mm]
+{\addvspace{1em}}
+{\bfseries\uppercase}
+{\bfseries\uppercase}%\hspace*{-9mm}
+{\hfill \sffamily \contentspage}[\medskip]
+
+
+\titlecontents{section}
+[9mm]
+{\raggedright \sffamily}
+{}
+{}%\hspace*{-9mm}
+{\titlerule*[0.3pc]{.}\contentspage}[\medskip]
+
+% Запрет переносов
+% см. https://tex.stackexchange.com/questions/430173/disable-hyphenation-in-toc
+% не работает для частичных ToC
+\renewcommand{\@tocrmarg}{2.55em plus1fil}
+
+% главы без страниц
+\assignpagestyle{\chapter}{empty}
+
+%*******************
+% колонтитулы
+%*******************
+
+
+
+
+
+\newpagestyle{main}[\small]{
+    \setheadrule{0.6pt}%
+    \sethead[\color{asrpColorMain} \sffamily \bfseries \thepage]%                                even-left
+            [\color{asrpColorMain} \sffamily\asrpNameEn]% even-center
+            []%                                                 even-right
+            {}%                                                 odd-left
+            {\color{asrpColorMain} \sffamily \asrpNameEn}% odd-center
+            {\color{asrpColorMain} \sffamily \bfseries \thepage}%                                odd-right
+  }
+
+%*********************
+% Библиография
+%*********************
+\RequirePackage[%
+backend=biber,
+bibencoding=utf8,
+style=gost-numeric,
+language=autobib,
+autolang=other,
+clearlang=true,
+sortcites=true,
+]{biblatex}
+
+\RequirePackage{csquotes}
+
+% Вначале выводим русскоязычныке источники по langid
+\DeclareSourcemap{
+    \maps[datatype=bibtex]{
+        \map{
+            \step[fieldsource=langid, match=russian, final]
+            \step[fieldset=presort, fieldvalue={a}]
+        }
+        \map{
+            \step[fieldsource=langid, notmatch=russian, final]
+            \step[fieldset=presort, fieldvalue={z}]
+        }
+    }
+}
+
+% Перенос длинных URL в библиографии
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+
+% Запрет кодирования URL
+\DeclareFieldFormat{url}{%
+    \mkbibacro{URL}\addcolon\space
+    \href{#1}{\nolinkurl{\thefield{urlraw}}}}
+
+% Нумерация библиографии с точкой
+\renewcommand\@biblabel[1]{#1.}
+
+% шрифт в библиографии
+%\AtBeginBibliography{\fontsize{9pt}{11.5pt}\selectfont}
+
+\renewcommand*{\bibfont}{\small}
+
+\defbibheading{asrpBibheading}{\begin{center}\normalsize \bfseries \sffamily Библиографический список\end{center}}
+\defbibheading{asrpBibheadingEn}{\begin{center}\normalsize \bfseries \sffamily References\end{center}}
+
+% цвет квадратных скобок в биб ссылках, сами ссылки — см. citecolor в hyperref
+\AtEveryCite{\color{asrpCiteColor}}
+
+%*************
+% нумерация
+%*************
+\RequirePackage{chngcntr}
+\counterwithout{equation}{chapter}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+
+%*******************
+% висяки и переносы
+%*******************
+\hyphenpenalty=750 % default = 50
+\RequirePackage{lua-widow-control}
+\lwcsetup{balanced}
+
+%\clubpenalty=8000
+%\widowpenalty=8000
+%подавление переносов между страницами
+\brokenpenalty=8000\relax
+
+% переносы
+\input{hyphenation.tex}
+
+% автоматизация запрета на отрыв предлогов
+\RequirePackage{luavlna}
+\singlechars{russian}{ВСАКИОУвсакиоу}
+
+%*******************
+% hyperref
+%*******************
+
+
+\RequirePackage[final,
+pdfauthor={\asrpName},
+pdftitle={\asrpName}, luatex]{hyperref}
+
+
+
+\hypersetup{
+    unicode=true,
+    colorlinks=true,
+    linkcolor=asrpURLColor,
+    citecolor=asrpCiteColor,
+    filecolor=blue,
+    urlcolor=asrpURLColor
+}
+
+%*******************
+% Окружения и макросы
+%*******************
+
+\RequirePackage{ifthen}
+
+% ссылки с черным цветом (для email)
+\newcommand{\Blhref}[3][asrpAutEmail]{\href{#2}{\color{#1}{#3}}}%
+
+
+
+
+\newcommand{\asrpKwords}[1]
+    {
+     \begin{flushleft}
+        {\noindent \sffamily \bfseries\color{asrpKWName} Keywords}:
+        {\color{asrpKW} #1}
+        \par\noindent{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}
+     \end{flushleft}
+    }
+    
+\newcommand{\asrpAbstract}[1]{%
+    \par\noindent{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}
+    \begin{flushleft}
+        {\noindent \sffamily \bfseries\color{asrpKWName} Abstract}:
+    \end{flushleft}
+    \noindent    #1\par
+    \par\noindent{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}
+}
+
+
+
+
+% Автор, должность + организация + адрес, ORCID, email    
+\newcommand{\asrpAut}[4]{%
+    \begin{flushleft}
+        \setstretch{1.1}
+        {\small \sffamily \medfont \color{asrpColorMain}  #1}
+        {\small \sffamily #2}\\
+        {\small \sffamily ORCID: \Blhref{https://orcid.org/#3}{#3}};
+        {\small \sffamily E-mail: \Blhref{mailto:#4}{#4}}%
+    \end{flushleft}
+}
+
+
+\newenvironment{asrpArticle}
+{\begin{refsection}
+ \begin{multicols}{2}}
+{\end{multicols}
+\FloatBarrier
+
+\begin{multicols}{2}
+\asrpBibSpace
+\begingroup
+\setstretch{1.0}
+\printbibliography[heading=asrpBibheadingEn]
+\endgroup
+\end{multicols}
+\end{refsection}
+
+}
+
+
+
+% глава (рубрика)
+\newcommand{\asrpChapter}[1]{%
+    \chapter{#1}
+}
+
+
+
+% секция (статья)
+\newcommand\asrpSection[2]{%
+    \section[\bfseries#1~{\normalfont #2}]{#2}
+    \setcounter{figure}{0}
+    \setcounter{table}{0}
+    \setcounter{equation}{0}
+    \setcounter{footnote}{0}
+}
+
+
+
+
+
+% для мелких изображений в multicol
+\newenvironment{Figure}
+{\par\medskip\noindent\minipage{\linewidth}}
+{\endminipage\par\medskip}
+
+% отступ перед Биб. списком
+\newcommand{\asrpBibSpace}{%
+\vspace{1em}
+}
+
+
+% Оглавление русск. части
+\newcommand{\asrpPrintRuCont}{%
+    {\hspace{5mm}\raggedright\Large\bfseries\sffamily\MakeUppercase{Содержание}\par}
+    %\hyphenchar\font=-1 % disable hyphen
+    % \printcontents[<name>]{<prefix>}{<нач уровень>}[<глубина>]{<toc-code>}
+    {\hypersetup{linkcolor=black}\printcontents[partru]{ }{0}[1]
+    {}}
+    %\hyphenchar\font=`\- % reset hyphen
+    \clearpage
+}
+
+% Оглавление англ. части
+\newcommand{\asrpPrintEnCont}{%
+    \pagestyle{empty}
+    {\hspace{5mm}\raggedright\Large\bfseries\sffamily\MakeUppercase{Contents}\par}
+    %\hyphenchar\font=-1 % disable hyphen
+    {\hypersetup{linkcolor=black}\printcontents[parten]{ }{0}[1]
+    {}}
+    %\hyphenchar\font=`\- % reset hyphen
+}
+
+
+% удерживать pagestyle в Оглавлении
+\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{empty}}}
+
+
+% блок с предотвращением разрыва страниц
+\newenvironment{glued}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
