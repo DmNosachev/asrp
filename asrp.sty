@@ -7,6 +7,8 @@
 
 \newcommand{\asrpName}{Перспективные Научно-Исследовательские Разработки}
 \newcommand{\asrpNameEn}{Advanced Scientific Research Projects}
+\newcommand{\asrpSubNameEn}{ASRP.science}
+\newcommand{\asrpFullNameEn}{{\bfseries ASRP.science} {\medfont (Scientific Peer-Reviewed Journal by Advanced Scientific Research Projects)}}
 \definecolor{asrpColorMain}{HTML}{C00000} % заголовки
 \definecolor{asrpAutColor}{HTML}{FF0000} % заголовки
 \definecolor{asrpHeaderRule}{HTML}{800000} % линейка в шапке
@@ -38,8 +40,8 @@
 %*******************
 % Языки
 \RequirePackage{polyglossia}
-\setmainlanguage{english}
-\setotherlanguages{russian}
+\setmainlanguage{russian}
+\setotherlanguages{english}
 
 
 \RequirePackage{fontspec}
@@ -48,7 +50,7 @@
 %\setmainfont[ItalicFont={Noto Sans Italic}]{Onest}
 \setmainfont{Noto Sans} 
 \setromanfont[Scale=MatchLowercase]{Noto Serif}
-\setsansfont{Noto Sans}
+\setsansfont[Scale=MatchLowercase]{Noto Sans}
 
 \IfFontExistsTF{Noto Mono}{%
     \setmonofont[Scale=MatchLowercase]{Noto Mono}%
@@ -198,7 +200,7 @@
 
   
 \titleformat{\section}[block]
-{\color{asrpColorMain}\setstretch{1.1}\raggedright \huge \bfseries \sffamily}
+{\color{asrpColorMain}\setstretch{1.0}\raggedright \Large \medfont \sffamily}
 {#1}
 {0em}
 {}
@@ -265,10 +267,10 @@
 \newpagestyle{main}[\small]{
     \setheadrule{0.6pt}%
     \sethead[\color{asrpColorMain} \sffamily \bfseries \thepage]%                                even-left
-            [\color{asrpColorMain} \sffamily\asrpNameEn]% even-center
+            [\color{asrpColorMain} \sffamily \asrpSectionShort]% even-center
             []%                                                 even-right
             {}%                                                 odd-left
-            {\color{asrpColorMain} \sffamily \asrpNameEn}% odd-center
+            {\color{asrpColorMain} \sffamily \asrpSubNameEn}% odd-center
             {\color{asrpColorMain} \sffamily \bfseries \thepage}%                                odd-right
   }
 
@@ -318,8 +320,8 @@ sortcites=true,
 
 \renewcommand*{\bibfont}{\small}
 
-\defbibheading{asrpBibheading}{\begin{center}\normalsize \bfseries \sffamily Библиографический список\end{center}}
-\defbibheading{asrpBibheadingEn}{\begin{center}\normalsize \bfseries \sffamily References\end{center}}
+\defbibheading{asrpBibheading}{\begin{center}\normalsize \bfseries \sffamily \color{asrpColorMain} Библиографический список\end{center}}
+\defbibheading{asrpBibheadingEn}{\begin{center}\normalsize \bfseries \sffamily \color{asrpColorMain} References\end{center}}
 
 % цвет квадратных скобок в биб ссылках, сами ссылки — см. citecolor в hyperref
 \AtEveryCite{\color{asrpCiteColor}}
@@ -401,7 +403,14 @@ pdftitle={\asrpName}, luatex]{hyperref}
     \par\noindent{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}
 }
 
-
+\newcommand{\asrpAbstractRu}[1]{%
+    \par\noindent{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}
+    \begin{flushleft}
+        {\noindent \sffamily \bfseries\color{asrpKWName} Аннотация}:
+    \end{flushleft}
+    \noindent    #1\par
+    \par\noindent{\color{asrpHeaderRule} \rule{\textwidth}{0.6pt}}
+}
 
 
 % Автор, должность + организация + адрес, ORCID, email    
@@ -433,6 +442,22 @@ pdftitle={\asrpName}, luatex]{hyperref}
 
 }
 
+\newenvironment{asrpArticleRu}
+{\begin{refsection}
+ \begin{multicols}{2}}
+{\end{multicols}
+\FloatBarrier
+
+\begin{multicols}{2}
+\asrpBibSpace
+\begingroup
+\setstretch{1.0}
+\printbibliography[heading=asrpBibheading]
+\endgroup
+\end{multicols}
+\end{refsection}
+
+}
 
 
 % глава (рубрика)
